@@ -1,0 +1,24 @@
+{
+    "barang": [
+      {
+        "id": 1,
+        "nama": "Semen Tiga Roda",
+        "harga": 65000,
+        "stok": 50
+      },
+      {
+        "id": 2,
+        "nama": "Cat Avian",
+        "harga": 120000,
+        "stok": 20
+      },
+      {
+        "id": 3,
+        "nama": "Pipa PVC",
+        "harga": 85000,
+        "stok": 35
+      }
+    ],
+  
+    "transaksi": []
+  }
