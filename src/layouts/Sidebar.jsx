@@ -17,30 +17,36 @@ function Sidebar() {
   ];
 
   return (
-    <aside className="w-72 bg-white border-r border-gray-200 min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-blue-500 mb-10">
-        GudangKasir
-      </h1>
+    <aside className="w-72 bg-white min-h-screen px-6 py-8 border-r border-gray-100 flex flex-col">
 
-      <nav className="flex flex-col gap-4">
+      {/* 🔥 TITLE BESAR (CLEAN TANPA GARIS) */}
+      <div className="mb-12">
+        <h1 className="text-4xl font-extrabold text-blue-600 tracking-wide leading-tight">
+          GudangKasir
+        </h1>
+      </div>
+
+      {/* MENU */}
+      <nav className="flex flex-col gap-4 flex-1">
         {menu.map((item) => (
           <NavLink
             key={item.name}
             to={item.path}
             end={item.path === "/"}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-5 py-4 rounded-2xl transition ${
+              `flex items-center gap-4 px-5 py-4 rounded-xl text-base font-medium transition-all duration-300 ${
                 isActive
-                  ? "bg-blue-500 text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+                  ? "bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-md"
+                  : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
               }`
             }
           >
-            {item.icon}
+            <span className="text-xl">{item.icon}</span>
             {item.name}
           </NavLink>
         ))}
       </nav>
+
     </aside>
   );
 }

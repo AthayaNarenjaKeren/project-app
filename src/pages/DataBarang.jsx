@@ -91,8 +91,9 @@ function DataBarang() {
     <div>
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Data Barang</h1>
 
-      <div className="bg-white rounded-3xl p-8 shadow-sm mb-8">
-        <h2 className="text-2xl font-bold mb-6">
+      {/* 🔥 FORM (SUDAH DI-UPGRADE) */}
+      <div className="bg-white rounded-2xl p-6 shadow-md mb-8">
+        <h2 className="text-lg font-semibold mb-4 text-gray-800">
           {editId ? "Edit Barang" : "Tambah Barang"}
         </h2>
 
@@ -103,7 +104,7 @@ function DataBarang() {
             placeholder="Nama Barang"
             value={form.nama_barang}
             onChange={handleChange}
-            className="border p-3 rounded-xl"
+            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
             required
           />
 
@@ -113,7 +114,7 @@ function DataBarang() {
             placeholder="Harga"
             value={form.harga}
             onChange={handleChange}
-            className="border p-3 rounded-xl"
+            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
             required
           />
 
@@ -123,11 +124,11 @@ function DataBarang() {
             placeholder="Stok"
             value={form.stok}
             onChange={handleChange}
-            className="border p-3 rounded-xl"
+            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
             required
           />
 
-          <button className="bg-blue-500 text-white rounded-xl font-semibold">
+          <button className="bg-gradient-to-r from-blue-600 to-blue-400 text-white rounded-xl font-medium shadow-md hover:opacity-90 transition">
             {editId ? "Update" : "Tambah"}
           </button>
         </form>
@@ -135,17 +136,20 @@ function DataBarang() {
         {editId && (
           <button
             onClick={resetForm}
-            className="mt-4 bg-gray-200 px-5 py-2 rounded-xl"
+            className="mt-4 text-sm text-gray-500 hover:text-gray-800"
           >
             Batal Edit
           </button>
         )}
 
         {message && (
-          <p className="mt-4 font-semibold text-green-600">{message}</p>
+          <p className="mt-4 text-sm font-medium text-green-600">
+            {message}
+          </p>
         )}
       </div>
 
+      {/* TABLE (TIDAK DIUBAH SESUAI REQUEST) */}
       <div className="bg-white rounded-3xl p-8 shadow-sm">
         <h2 className="text-2xl font-bold mb-6">
           Daftar Barang Toko Bangunan
@@ -194,4 +198,3 @@ function DataBarang() {
 }
 
 export default DataBarang;
-
