@@ -17,6 +17,11 @@ function DataBarang() {
   const [search, setSearch] = useState("");
   const [selectedKategori, setSelectedKategori] = useState("");
 
+  // 🔥 STATE UNTUK POPUP TAMBAH STOK
+  const [showStokModal, setShowStokModal] = useState(false);
+  const [stokItem, setStokItem] = useState(null);
+  const [stokTambahan, setStokTambahan] = useState("");
+
   useEffect(() => {
     getBarang();
   }, []);
@@ -95,6 +100,43 @@ function DataBarang() {
         getBarang();
       });
     }
+  };
+
+  // 🔥 FUNGSI UNTUK BUKA POPUP TAMBAH STOK
+  const handleBukaModalStok = (item) => {
+    setStokItem(item);
+    setStokTambahan("");
+    setShowStokModal(true);
+  };
+
+  // 🔥 FUNGSI UNTUK SIMPAN TAMBAH STOK
+  const handleTambahStok = () => {
+    const tambahan = Number(stokTambahan);
+    if (!tambahan || tambahan <= 0) {
+      alert("Masukkan angka yang valid (minimal 1)");
+      return;
+    }
+
+    const stokBaru = stokItem.stok + tambahan;
+
+    axios
+      .put(`${API_URL}/barang/${stokItem.id}`, {
+        nama_barang: stokItem.nama_barang,
+        harga: stokItem.harga,
+        stok: stokBaru,
+        kategori: stokItem.kategori,
+      })
+      .then((res) => {
+        setMessage(`✅ Stok ${stokItem.nama_barang} berhasil ditambah ${tambahan} (total: ${stokBaru})`);
+        getBarang();
+        setShowStokModal(false);
+        setStokItem(null);
+        setStokTambahan("");
+      })
+      .catch((err) => {
+        setMessage("❌ Gagal menambah stok");
+        console.log(err);
+      });
   };
 
   const handleDeleteKategori = (kategori) => {
@@ -367,13 +409,22 @@ function DataBarang() {
                           Rp{Number(item.harga).toLocaleString("id-ID")}
                         </td>
                         <td className="p-4 text-gray-600">{item.stok}</td>
-                        <td className="p-4 flex gap-2">
+                        <td className="p-4 flex gap-2 flex-wrap">
                           <button
                             onClick={() => handleEdit(item)}
                             className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg transition"
                           >
                             Edit
                           </button>
+
+                          {/* 🔥 TOMBOL TAMBAH STOK */}
+                          <button
+                            onClick={() => handleBukaModalStok(item)}
+                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition"
+                          >
+                            + Stok
+                          </button>
+
                           <button
                             onClick={() => handleDelete(item.id)}
                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
@@ -390,6 +441,51 @@ function DataBarang() {
           ))
         )}
       </div>
+
+      {/* 🔥 MODAL / POPUP TAMBAH STOK */}
+      {showStokModal && stokItem && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">
+              Tambah Stok
+            </h3>
+            <p className="text-gray-500 mb-4">
+              Tambah stok untuk <span className="font-bold">{stokItem.nama_barang}</span>
+              <br />
+              <span className="text-sm">Stok saat ini: <strong>{stokItem.stok}</strong></span>
+            </p>
+
+            <input
+              type="number"
+              placeholder="Masukkan jumlah tambahan..."
+              value={stokTambahan}
+              onChange={(e) => setStokTambahan(e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+              autoFocus
+              min="1"
+            />
+
+            <div className="flex gap-3">
+              <button
+                onClick={handleTambahStok}
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition"
+              >
+                ✅ Tambah
+              </button>
+              <button
+                onClick={() => {
+                  setShowStokModal(false);
+                  setStokItem(null);
+                  setStokTambahan("");
+                }}
+                className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-3 rounded-xl font-semibold transition"
+              >
+                Batal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
