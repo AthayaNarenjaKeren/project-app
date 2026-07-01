@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Notification from "../components/notification";
+import Notification from "../components/Notification";
 
 function Dashboard() {
   const API_URL = "http://localhost:5001";
@@ -17,6 +17,10 @@ function Dashboard() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [viewType, setViewType] = useState("daily");
+
+  // 🔥 STATE UNTUK DATA BULAN INI (untuk card Total Transaksi & Total Penjualan)
+  const [transaksiBulanIni, setTransaksiBulanIni] = useState([]);
+  const [totalPenjualanBulanIni, setTotalPenjualanBulanIni] = useState(0);
 
   useEffect(() => {
     getData();
@@ -38,6 +42,25 @@ function Dashboard() {
       const dataTransaksi = resTransaksi.data;
       setTransaksi(dataTransaksi);
 
+      // 🔥 FILTER TRANSAKSI BULAN INI
+      const now = new Date();
+      const bulanIni = now.getMonth();
+      const tahunIni = now.getFullYear();
+
+      const transaksiBulanIniFilter = dataTransaksi.filter((item) => {
+        const tanggal = new Date(item.tanggal);
+        return tanggal.getMonth() === bulanIni && tanggal.getFullYear() === tahunIni;
+      });
+
+      setTransaksiBulanIni(transaksiBulanIniFilter);
+
+      const totalBulanIni = transaksiBulanIniFilter.reduce(
+        (sum, item) => sum + (item.total_harga || 0),
+        0
+      );
+      setTotalPenjualanBulanIni(totalBulanIni);
+
+      // Total semua (untuk yang lain)
       const total = dataTransaksi.reduce(
         (sum, item) => sum + (item.total_harga || 0),
         0
@@ -150,19 +173,19 @@ function Dashboard() {
       color: "text-green-500",
     },
     {
-      title: "Total Transaksi",
-      value: transaksi.length,
+      title: "Total Transaksi (Bulan Ini)",
+      value: transaksiBulanIni.length,
       icon: "🧾",
       bg: "bg-yellow-100",
-      note: `${transaksi.length} transaksi tercatat`,
+      note: `${transaksiBulanIni.length} transaksi bulan ini`,
       color: "text-green-500",
     },
     {
-      title: "Total Penjualan",
-      value: `Rp${totalPenjualan.toLocaleString("id-ID")}`,
+      title: "Total Penjualan (Bulan Ini)",
+      value: `Rp${totalPenjualanBulanIni.toLocaleString("id-ID")}`,
       icon: "📈",
       bg: "bg-green-100",
-      note: "Total pendapatan",
+      note: "Pendapatan bulan ini",
       color: "text-green-500",
     },
     {
@@ -241,7 +264,7 @@ function Dashboard() {
               {viewType === "daily" ? "Per Hari" : "Per Bulan"}
             </h2>
             <p className="text-sm text-gray-400">
-              Total pendapatan:{" "}
+              Total pendapatan bulan {monthNames[selectedMonth]} {selectedYear}:{" "}
               <span className="font-bold text-blue-600">
                 Rp{totalChartValue.toLocaleString("id-ID")}
               </span>

@@ -120,20 +120,44 @@ function Kasir() {
     item.nama_barang.toLowerCase().includes(search.toLowerCase())
   );
 
+  // 🔥 FUNGSI GET ICON/GAMBAR UNTUK KARTU BARANG
   const getIcon = (nama) => {
-    if (nama.includes('Cat') || nama.includes('Avian') || nama.includes('No Drop')) return '🎨';
+    if (nama.includes('Cat') || nama.includes('Avian') || nama.includes('No Drop') || nama.includes('Avitex')) return '🎨';
     if (nama.includes('Semen') || nama.includes('Mortar')) return '🧱';
-    if (nama.includes('Kayu') || nama.includes('Triplek') || nama.includes('Multiplek')) return '🪵';
+    if (nama.includes('Kayu') || nama.includes('Triplek') || nama.includes('Multiplek') || nama.includes('Gipsum')) return '🪵';
     if (nama.includes('Paku')) return '📌';
-    if (nama.includes('Pipa')) return '🔧';
+    if (nama.includes('Pipa') || nama.includes('Dop')) return '🔧';
     if (nama.includes('Keramik') || nama.includes('Granit') || nama.includes('Mosaic')) return '🪞';
-    if (nama.includes('Lampu') || nama.includes('Kabel') || nama.includes('Saklar') || nama.includes('Stop')) return '💡';
+    if (nama.includes('Lampu') || nama.includes('Kabel') || nama.includes('Saklar') || nama.includes('Stop') || nama.includes('Fitting')) return '💡';
     if (nama.includes('Besi') || nama.includes('Siku')) return '🔩';
     if (nama.includes('Batu') || nama.includes('Batako') || nama.includes('Hebel')) return '🪨';
     if (nama.includes('Pasir')) return '🏖️';
     if (nama.includes('Gerinda') || nama.includes('Bor') || nama.includes('Gergaji') || nama.includes('Obeng') || nama.includes('Tang')) return '🔨';
     if (nama.includes('Meteran') || nama.includes('Neraca') || nama.includes('Timbangan')) return '📏';
+    if (nama.includes('Genteng') || nama.includes('Asbes') || nama.includes('Seng')) return '🏠';
+    if (nama.includes('Palu')) return '🔨';
+    if (nama.includes('Ember')) return '🪣';
+    if (nama.includes('Kuas') || nama.includes('Roller') || nama.includes('Thinner')) return '🖌️';
+    if (nama.includes('Cangkul') || nama.includes('Sekop')) return '⛏️';
+    if (nama.includes('Yolko') || nama.includes('Boyo') || nama.includes('Ve')) return '🧪';
     return '📦';
+  };
+
+  // 🔥 FUNGSI GET WARNA BACKGROUND UNTUK KARTU
+  const getBgColor = (nama) => {
+    if (nama.includes('Cat') || nama.includes('Avian') || nama.includes('No Drop')) return 'bg-purple-100';
+    if (nama.includes('Semen') || nama.includes('Mortar')) return 'bg-blue-100';
+    if (nama.includes('Kayu') || nama.includes('Triplek') || nama.includes('Multiplek')) return 'bg-amber-100';
+    if (nama.includes('Paku')) return 'bg-gray-200';
+    if (nama.includes('Pipa')) return 'bg-cyan-100';
+    if (nama.includes('Keramik') || nama.includes('Granit')) return 'bg-pink-100';
+    if (nama.includes('Lampu') || nama.includes('Kabel') || nama.includes('Saklar')) return 'bg-yellow-100';
+    if (nama.includes('Besi')) return 'bg-slate-200';
+    if (nama.includes('Batu') || nama.includes('Batako') || nama.includes('Hebel')) return 'bg-stone-200';
+    if (nama.includes('Pasir')) return 'bg-orange-100';
+    if (nama.includes('Gerinda') || nama.includes('Bor') || nama.includes('Gergaji')) return 'bg-red-100';
+    if (nama.includes('Genteng') || nama.includes('Asbes') || nama.includes('Seng')) return 'bg-indigo-100';
+    return 'bg-blue-50';
   };
 
   return (
@@ -172,19 +196,20 @@ function Kasir() {
                   item.stok === 0 ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
-                <div className="h-28 bg-blue-50 rounded-xl flex items-center justify-center text-5xl mb-4">
+                {/* 🔥 GAMBAR/ICON DENGAN WARNA BACKGROUND */}
+                <div className={`${getBgColor(item.nama_barang)} rounded-xl flex items-center justify-center text-6xl mb-4 h-28`}>
                   {getIcon(item.nama_barang)}
                 </div>
 
-                <h3 className="font-bold text-gray-800">
+                <h3 className="font-bold text-gray-800 text-center">
                   {item.nama_barang}
                 </h3>
 
-                <p className="text-blue-500 font-semibold mt-2">
+                <p className="text-blue-500 font-semibold mt-2 text-center">
                   Rp{Number(item.harga).toLocaleString("id-ID")}
                 </p>
 
-                <p className={`text-sm mt-1 ${item.stok <= 5 ? "text-red-500 font-semibold" : "text-gray-500"}`}>
+                <p className={`text-sm mt-1 text-center ${item.stok <= 5 ? "text-red-500 font-semibold" : "text-gray-500"}`}>
                   Stok: {item.stok} {item.stok <= 5 && "⚠️"}
                 </p>
               </div>
@@ -209,11 +234,14 @@ function Kasir() {
                 className="border-b border-gray-100 pb-4"
               >
                 <div className="flex justify-between">
-                  <div>
-                    <h3 className="font-semibold text-gray-800">{item.nama_barang}</h3>
-                    <p className="text-sm text-gray-500">
-                      Rp{Number(item.harga).toLocaleString("id-ID")}
-                    </p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{getIcon(item.nama_barang)}</span>
+                    <div>
+                      <h3 className="font-semibold text-gray-800">{item.nama_barang}</h3>
+                      <p className="text-sm text-gray-500">
+                        Rp{Number(item.harga).toLocaleString("id-ID")}
+                      </p>
+                    </div>
                   </div>
 
                   <button

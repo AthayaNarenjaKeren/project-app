@@ -17,6 +17,10 @@ function DataBarang() {
   const [search, setSearch] = useState("");
   const [selectedKategori, setSelectedKategori] = useState("");
 
+  // 🔥 STATE UNTUK PAGINATION
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   // 🔥 STATE UNTUK POPUP TAMBAH STOK
   const [showStokModal, setShowStokModal] = useState(false);
   const [stokItem, setStokItem] = useState(null);
@@ -199,6 +203,7 @@ function DataBarang() {
       .scrollIntoView({ behavior: "smooth" });
   };
 
+  // 🔥 FILTER DATA
   const filteredBarang = barang.filter((item) => {
     const matchSearch = item.nama_barang
       .toLowerCase()
@@ -208,16 +213,71 @@ function DataBarang() {
     return matchSearch && matchKategori;
   });
 
-  const filteredGrouped = {};
-  filteredBarang.forEach((item) => {
+  // 🔥 PAGINATION - HITUNG TOTAL HALAMAN
+  const totalPages = Math.ceil(filteredBarang.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredBarang.slice(indexOfFirstItem, indexOfLastItem);
+
+  // 🔥 GROUP DATA YANG SUDAH DI-PAGINATION
+  const groupedCurrentItems = {};
+  currentItems.forEach((item) => {
     const kategori = item.kategori || "Lainnya";
-    if (!filteredGrouped[kategori]) filteredGrouped[kategori] = [];
-    filteredGrouped[kategori].push(item);
+    if (!groupedCurrentItems[kategori]) groupedCurrentItems[kategori] = [];
+    groupedCurrentItems[kategori].push(item);
   });
 
-  const kategoriList = [
-    ...new Set(barang.map((item) => item.kategori || "Lainnya")),
-  ];
+  // 🔥 FUNGSI PAGINATION
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  // 🔥 HITUNG JUMLAH PER KATEGORI UNTUK CARD
+  const kategoriCount = {};
+  barang.forEach((item) => {
+    const kategori = item.kategori || "Lainnya";
+    if (!kategoriCount[kategori]) kategoriCount[kategori] = 0;
+    kategoriCount[kategori]++;
+  });
+
+  const kategoriList = Object.keys(kategoriCount);
+
+  // 🔥 WARNA UNTUK CARD KATEGORI
+  const warnaKategori = {
+    "Cat Avian": "bg-purple-100 border-purple-400 hover:bg-purple-200",
+    "Semen": "bg-blue-100 border-blue-400 hover:bg-blue-200",
+    "Bahan Bangunan": "bg-green-100 border-green-400 hover:bg-green-200",
+    "Kayu": "bg-amber-100 border-amber-400 hover:bg-amber-200",
+    "Keramik": "bg-pink-100 border-pink-400 hover:bg-pink-200",
+    "Cat": "bg-red-100 border-red-400 hover:bg-red-200",
+    "Pipa PVC": "bg-cyan-100 border-cyan-400 hover:bg-cyan-200",
+    "Pipa Besi": "bg-slate-100 border-slate-400 hover:bg-slate-200",
+    "Paku": "bg-gray-100 border-gray-400 hover:bg-gray-200",
+    "Peralatan": "bg-orange-100 border-orange-400 hover:bg-orange-200",
+    "Listrik": "bg-yellow-100 border-yellow-400 hover:bg-yellow-200",
+    "Mortar": "bg-teal-100 border-teal-400 hover:bg-teal-200",
+    "Atap": "bg-indigo-100 border-indigo-400 hover:bg-indigo-200",
+    "Lainnya": "bg-gray-100 border-gray-400 hover:bg-gray-200",
+  };
+
+  const iconKategori = {
+    "Cat Avian": "🎨",
+    "Semen": "🧱",
+    "Bahan Bangunan": "🏗️",
+    "Kayu": "🪵",
+    "Keramik": "🪞",
+    "Cat": "🎨",
+    "Pipa PVC": "🔧",
+    "Pipa Besi": "🔩",
+    "Paku": "📌",
+    "Peralatan": "🔨",
+    "Listrik": "💡",
+    "Mortar": "🧱",
+    "Atap": "🏠",
+    "Lainnya": "📦",
+  };
 
   const daftarKategori = [
     "Cat Avian",
@@ -313,49 +373,113 @@ function DataBarang() {
         )}
       </div>
 
-      {/* SEARCH & FILTER */}
-      <div className="flex gap-4 mb-6">
+      {/* 🔥 CARD KATEGORI - FILTER CEPAT */}
+      <div className="mb-6">
+        <h3 className="text-sm font-semibold text-gray-500 mb-3">
+          📂 Filter Kategori
+        </h3>
+        <div className="flex flex-wrap gap-3">
+          {/* Card "Semua" */}
+          <div
+            onClick={() => {
+              setSelectedKategori("");
+              setCurrentPage(1);
+            }}
+            className={`cursor-pointer px-5 py-3 rounded-xl border-2 transition-all duration-200 ${
+              selectedKategori === ""
+                ? "bg-blue-500 text-white border-blue-600 shadow-md"
+                : "bg-white border-gray-300 hover:border-blue-400 hover:shadow-md text-gray-700"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-xl">📊</span>
+              <div>
+                <p className="font-bold text-sm">Semua</p>
+                <p className="text-xs opacity-75">{barang.length} barang</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card per Kategori */}
+          {kategoriList.map((kategori) => (
+            <div
+              key={kategori}
+              onClick={() => {
+                setSelectedKategori(kategori);
+                setCurrentPage(1);
+              }}
+              className={`cursor-pointer px-5 py-3 rounded-xl border-2 transition-all duration-200 ${
+                selectedKategori === kategori
+                  ? "bg-blue-500 text-white border-blue-600 shadow-md"
+                  : `${warnaKategori[kategori] || "bg-gray-100 border-gray-300 hover:border-blue-400 hover:shadow-md"} text-gray-700`
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">{iconKategori[kategori] || "📦"}</span>
+                <div>
+                  <p className="font-bold text-sm">{kategori}</p>
+                  <p className="text-xs opacity-75">{kategoriCount[kategori]} barang</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* SEARCH + ITEMS PER PAGE */}
+      <div className="flex flex-wrap gap-4 mb-6 items-center">
         <input
           type="text"
           placeholder="Cari barang..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-white border border-gray-200 rounded-xl px-5 py-3 outline-none focus:ring-2 focus:ring-blue-400 flex-1"
+          className="bg-white border border-gray-200 rounded-xl px-5 py-3 outline-none focus:ring-2 focus:ring-blue-400 flex-1 min-w-[200px]"
         />
-        <select
-          value={selectedKategori}
-          onChange={(e) => setSelectedKategori(e.target.value)}
-          className="bg-white border border-gray-200 rounded-xl px-5 py-3 outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          <option value="">Semua Kategori</option>
-          {kategoriList.map((kategori) => (
-            <option key={kategori} value={kategori}>
-              {kategori}
-            </option>
-          ))}
-        </select>
+
+        <div className="flex items-center gap-2 ml-auto">
+          <label className="text-sm text-gray-500">Tampil:</label>
+          <select
+            value={itemsPerPage}
+            onChange={(e) => {
+              setItemsPerPage(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
       </div>
 
       {/* TABLE */}
       <div id="table-section" className="bg-white rounded-2xl p-8 shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">
-          Daftar Barang Toko Bangunan
-        </h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">
+            Daftar Barang Toko Bangunan
+          </h2>
+          <span className="text-sm text-gray-400">
+            {selectedKategori ? `Kategori: ${selectedKategori}` : "Semua Kategori"} • Total: {filteredBarang.length} barang
+          </span>
+        </div>
 
-        {Object.keys(filteredGrouped).length === 0 ? (
+        {Object.keys(groupedCurrentItems).length === 0 ? (
           <p className="text-center text-gray-400 py-8">
             Tidak ada barang ditemukan
           </p>
         ) : (
-          Object.keys(filteredGrouped).map((kategori) => (
+          Object.keys(groupedCurrentItems).map((kategori) => (
             <div key={kategori} className="mb-8">
               {/* HEADER KATEGORI */}
               <div className="bg-gradient-to-r from-blue-500 to-blue-400 text-white px-6 py-3 rounded-xl mb-4 flex justify-between items-center">
                 <h3 className="text-lg font-bold flex items-center gap-2">
-                  <span className="text-2xl">📂</span>
+                  <span className="text-2xl">{iconKategori[kategori] || "📂"}</span>
                   {kategori}
                   <span className="text-sm font-normal ml-2 opacity-80">
-                    ({filteredGrouped[kategori].length} barang)
+                    ({groupedCurrentItems[kategori].length} barang)
                   </span>
                 </h3>
 
@@ -400,7 +524,7 @@ function DataBarang() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredGrouped[kategori].map((item) => (
+                    {groupedCurrentItems[kategori].map((item) => (
                       <tr key={item.id} className="border-b border-gray-100">
                         <td className="p-4 font-semibold text-gray-800">
                           {item.nama_barang}
@@ -416,15 +540,12 @@ function DataBarang() {
                           >
                             Edit
                           </button>
-
-                          {/* 🔥 TOMBOL TAMBAH STOK */}
                           <button
                             onClick={() => handleBukaModalStok(item)}
                             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition"
                           >
                             + Stok
                           </button>
-
                           <button
                             onClick={() => handleDelete(item.id)}
                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
@@ -440,6 +561,72 @@ function DataBarang() {
             </div>
           ))
         )}
+
+        {/* 🔥 PAGINATION */}
+        {filteredBarang.length > itemsPerPage && (
+          <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-500">
+              Menampilkan {indexOfFirstItem + 1} -{" "}
+              {Math.min(indexOfLastItem, filteredBarang.length)} dari{" "}
+              {filteredBarang.length} barang
+            </p>
+
+            <div className="flex gap-2 items-center">
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                ⬅️ Prev
+              </button>
+
+              <div className="flex gap-1">
+                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => goToPage(pageNum)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                        currentPage === pageNum
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                Next ➡️
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 🔥 MODAL / POPUP TAMBAH STOK */}
@@ -450,9 +637,12 @@ function DataBarang() {
               Tambah Stok
             </h3>
             <p className="text-gray-500 mb-4">
-              Tambah stok untuk <span className="font-bold">{stokItem.nama_barang}</span>
+              Tambah stok untuk{" "}
+              <span className="font-bold">{stokItem.nama_barang}</span>
               <br />
-              <span className="text-sm">Stok saat ini: <strong>{stokItem.stok}</strong></span>
+              <span className="text-sm">
+                Stok saat ini: <strong>{stokItem.stok}</strong>
+              </span>
             </p>
 
             <input
