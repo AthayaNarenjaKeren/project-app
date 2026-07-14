@@ -41,9 +41,7 @@ function Login() {
           className="w-full border border-gray-200 p-4 rounded-xl mb-6 outline-none focus:border-blue-500"
         />
 
-        <button className="w-full bg-blue-500 text-white py-4 rounded-xl font-semibold hover:bg-blue-600">
-          Login
-        </button>
+        <button className="btn btn-primary w-full">Login</button>
       </form>
     </div>
   );

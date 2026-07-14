@@ -301,10 +301,13 @@ function DataBarang() {
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Data Barang</h1>
 
       {/* FORM */}
-      <div className="bg-white rounded-2xl p-6 shadow-md mb-8">
+      <div className="card bg-base-100 shadow-xl">
+    <div className="card-body">
         <h2 className="text-lg font-semibold mb-4 text-gray-800">
           {editId ? "Edit Barang" : "Tambah Barang"}
         </h2>
+        </div>
+        
 
         <form onSubmit={handleSubmit} className="grid grid-cols-4 gap-4">
           <input
@@ -313,7 +316,7 @@ function DataBarang() {
             placeholder="Nama Barang"
             value={form.nama_barang}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
+            className="input input-bordered w-full"
             required
           />
 
@@ -323,7 +326,7 @@ function DataBarang() {
             placeholder="Harga"
             value={form.harga}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
+            className="input input-bordered w-full"
             required
           />
 
@@ -333,7 +336,7 @@ function DataBarang() {
             placeholder="Stok"
             value={form.stok}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
+            className="input input-bordered w-full"
             required
           />
 
@@ -341,7 +344,7 @@ function DataBarang() {
             name="kategori"
             value={form.kategori}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
+            className="input input-bordered w-full"
             required
           >
             <option value="">Pilih Kategori</option>
@@ -372,6 +375,7 @@ function DataBarang() {
           </div>
         )}
       </div>
+      
 
       {/* 🔥 CARD KATEGORI - FILTER CEPAT */}
       <div className="mb-6">

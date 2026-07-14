@@ -18,7 +18,6 @@ function Dashboard() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [viewType, setViewType] = useState("daily");
 
-  // 🔥 STATE UNTUK DATA BULAN INI (untuk card Total Transaksi & Total Penjualan)
   const [transaksiBulanIni, setTransaksiBulanIni] = useState([]);
   const [totalPenjualanBulanIni, setTotalPenjualanBulanIni] = useState(0);
 
@@ -42,14 +41,15 @@ function Dashboard() {
       const dataTransaksi = resTransaksi.data;
       setTransaksi(dataTransaksi);
 
-      // 🔥 FILTER TRANSAKSI BULAN INI
       const now = new Date();
       const bulanIni = now.getMonth();
       const tahunIni = now.getFullYear();
 
       const transaksiBulanIniFilter = dataTransaksi.filter((item) => {
         const tanggal = new Date(item.tanggal);
-        return tanggal.getMonth() === bulanIni && tanggal.getFullYear() === tahunIni;
+        return (
+          tanggal.getMonth() === bulanIni && tanggal.getFullYear() === tahunIni
+        );
       });
 
       setTransaksiBulanIni(transaksiBulanIniFilter);
@@ -60,7 +60,6 @@ function Dashboard() {
       );
       setTotalPenjualanBulanIni(totalBulanIni);
 
-      // Total semua (untuk yang lain)
       const total = dataTransaksi.reduce(
         (sum, item) => sum + (item.total_harga || 0),
         0
@@ -215,8 +214,7 @@ function Dashboard() {
   const totalChartValue = chartData.reduce((sum, d) => sum + d.value, 0);
 
   return (
-    <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-      {/* NOTIFIKASI */}
+    <div className="p-6 bg-base-200 min-h-screen">
       {barangMenipis.length > 0 && showNotif && (
         <Notification
           barangMenipis={barangMenipis}
@@ -224,71 +222,69 @@ function Dashboard() {
         />
       )}
 
-      <h1 className="text-3xl font-bold mb-8 text-gray-800">Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-8 text-base-content">Dashboard</h1>
 
-      {/* CARD */}
       <div className="grid grid-cols-4 gap-6 mb-8">
         {cards.map((card, index) => (
           <div
             key={index}
-            className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition duration-300 overflow-hidden relative"
+            className="card bg-base-100 shadow-xl hover:shadow-2xl transition duration-300 overflow-hidden relative"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-400"></div>
-
-            <div className="flex justify-between items-start mt-2">
-              <div>
-                <p className="text-gray-500 text-sm">{card.title}</p>
-                <h2 className="text-3xl font-bold mt-2 text-gray-800">
-                  {card.value}
-                </h2>
+            <div className="card-body p-6">
+              <div className="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+              <div className="flex justify-between items-start mt-2">
+                <div>
+                  <p className="text-base-content/60 text-sm">{card.title}</p>
+                  <h2 className="text-3xl font-bold mt-2 text-base-content">
+                    {card.value}
+                  </h2>
+                </div>
+                <div
+                  className={`${card.bg} w-14 h-14 rounded-2xl flex items-center justify-center text-2xl`}
+                >
+                  {card.icon}
+                </div>
               </div>
-
-              <div
-                className={`${card.bg} w-14 h-14 rounded-xl flex items-center justify-center text-2xl shadow-sm`}
-              >
-                {card.icon}
-              </div>
+              <p className={`text-sm mt-5 ${card.color}`}>{card.note}</p>
             </div>
-
-            <p className={`text-sm mt-5 ${card.color}`}>{card.note}</p>
           </div>
         ))}
       </div>
 
       {/* CHART */}
-      <div className="bg-white rounded-2xl p-6 shadow-md mb-8">
-        <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800">
-              Detail Penjualan -{" "}
-              {viewType === "daily" ? "Per Hari" : "Per Bulan"}
-            </h2>
-            <p className="text-sm text-gray-400">
-              Total pendapatan bulan {monthNames[selectedMonth]} {selectedYear}:{" "}
-              <span className="font-bold text-blue-600">
-                Rp{totalChartValue.toLocaleString("id-ID")}
-              </span>
-            </p>
+      <div className="card bg-base-100 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+        <div className="card-body">
+          <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
+            <div>
+              <h2 className="text-xl font-semibold text-base-content">
+                Detail Penjualan -{" "}
+                {viewType === "daily" ? "Per Hari" : "Per Bulan"}
+              </h2>
+              <p className="text-sm text-base-content/60">
+                Total pendapatan bulan {monthNames[selectedMonth]}{" "}
+                {selectedYear}:{" "}
+                <span className="font-bold text-primary">
+                  Rp{totalChartValue.toLocaleString("id-ID")}
+                </span>
+              </p>
+            </div>
           </div>
 
-          <div className="flex gap-3 items-center flex-wrap">
-            <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center gap-4 flex-wrap mb-6">
+            <div className="join">
               <button
                 onClick={() => handleViewChange("daily")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  viewType === "daily"
-                    ? "bg-blue-500 text-white shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
+                className={`join-item btn btn-sm ${
+                  viewType === "daily" ? "btn-primary" : "btn-outline"
                 }`}
               >
                 📅 Per Hari
               </button>
+
               <button
                 onClick={() => handleViewChange("monthly")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  viewType === "monthly"
-                    ? "bg-blue-500 text-white shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
+                className={`join-item btn btn-sm ${
+                  viewType === "monthly" ? "btn-primary" : "btn-outline"
                 }`}
               >
                 📊 Per Bulan
@@ -296,23 +292,20 @@ function Dashboard() {
             </div>
 
             {viewType === "daily" && (
-              <select
-                onChange={handleMonthChange}
-                value={selectedMonth}
-                className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
+              <select className="select select-bordered select-sm">
                 {monthNames.map((name, index) => (
                   <option key={index} value={index}>
                     {name}
                   </option>
                 ))}
+                <select className="select select-bordered select-sm"></select>
               </select>
             )}
 
             <select
               onChange={handleYearChange}
               value={selectedYear}
-              className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="select select-bordered select-sm"
             >
               <option value="2024">2024</option>
               <option value="2025">2025</option>
@@ -322,10 +315,17 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="h-72 flex items-end gap-1 pt-6">
+        <div className="h-80 flex items-end gap-2 pt-6">
           {chartData.length === 0 || chartData.every((d) => d.value === 0) ? (
-            <div className="w-full text-center text-gray-400">
-              Belum ada data penjualan untuk periode ini
+            <div className="w-full h-full flex flex-col justify-center items-center text-base-content/50">
+              <div className="text-6xl mb-3">📊</div>
+
+              <h3 className="font-semibold">Belum Ada Data Penjualan</h3>
+
+              <p className="text-sm">
+                Lakukan transaksi terlebih dahulu untuk melihat grafik
+                penjualan.
+              </p>
             </div>
           ) : (
             chartData.map((item, index) => (
@@ -334,19 +334,19 @@ function Dashboard() {
                 className="flex-1 flex flex-col items-center group"
               >
                 <div className="relative w-full">
-                  <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap pointer-events-none z-10">
+                  <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition bg-base-300 text-base-content text-xs rounded px-2 py-1 whitespace-nowrap pointer-events-none z-10">
                     {item.label || "Rp0"}
                   </div>
                   <div
                     className={`w-full rounded-t-lg transition-all duration-500 ${
                       item.value > 0
-                        ? "bg-gradient-to-t from-blue-600 via-blue-500 to-blue-400 hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 cursor-pointer"
-                        : "bg-gray-200"
+                        ? "bg-gradient-to-t from-primary to-primary/60 hover:from-primary/80 hover:to-primary/40 cursor-pointer"
+                        : "bg-base-300"
                     }`}
                     style={{ height: `${Math.max(item.height, 4)}px` }}
                   ></div>
                 </div>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-base-content/40 mt-2">
                   {viewType === "daily" ? index + 1 : item.date}
                 </p>
               </div>
@@ -354,7 +354,7 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="flex justify-between text-xs text-gray-400 mt-4 px-2">
+        <div className="flex justify-between text-xs text-base-content/40 mt-4 px-2">
           <span>
             {viewType === "daily"
               ? `Awal ${monthNames[selectedMonth]} ${selectedYear}`
@@ -369,84 +369,81 @@ function Dashboard() {
       </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl p-6 shadow-md">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800">
-              Detail Transaksi Kasir
-            </h2>
-            <p className="text-sm text-gray-400">
-              Riwayat transaksi penjualan terbaru
-            </p>
+      <div className="card bg-base-100 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+        <div className="card-body">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-xl font-semibold text-base-content">
+                Detail Transaksi Kasir
+              </h2>
+              <p className="text-sm text-base-content/60">
+                Riwayat transaksi penjualan terbaru
+              </p>
+            </div>
+            <button
+              onClick={() => (window.location.href = "/laporan")}
+              className="btn btn-primary btn-sm"
+            >
+              Lihat Semua →
+            </button>
           </div>
-
-          <button
-            onClick={() => (window.location.href = "/laporan")}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition"
-          >
-            Lihat Semua →
-          </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="table table-zebra">
             <thead>
-              <tr className="bg-gray-100 text-gray-600">
-                <th className="p-4 text-left rounded-l-xl">Barang</th>
-                <th className="p-4 text-left">Tanggal</th>
-                <th className="p-4 text-left">Jumlah</th>
-                <th className="p-4 text-left">Total</th>
-                <th className="p-4 text-left rounded-r-xl">Status</th>
+              <tr>
+                <th>Barang</th>
+                <th>Tanggal</th>
+                <th>Jumlah</th>
+                <th>Total</th>
+                <th>Status</th>
               </tr>
             </thead>
-
             <tbody>
               {transaksi.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="text-center py-8 text-gray-400">
+                  <td
+                    colSpan="5"
+                    className="text-center py-8 text-base-content/40"
+                  >
                     Belum ada transaksi
                   </td>
                 </tr>
               ) : (
                 transaksi.slice(0, 5).map((item) => (
-                  <tr key={item.id} className="border-b border-gray-100">
-                    <td className="p-4">
+                  <tr key={item.id}>
+                    <td>
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-100 text-blue-600 flex items-center justify-center rounded-lg font-bold">
+                        <div className="w-10 h-10 bg-primary/10 text-primary flex items-center justify-center rounded-lg font-bold">
                           {item.nama_barang.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-800">
+                          <p className="font-medium text-base-content">
                             {item.nama_barang}
                           </p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-base-content/40">
                             SKU: 00{item.id}
                           </p>
                         </div>
                       </div>
                     </td>
-
-                    <td className="p-4 text-gray-600">
+                    <td>
                       <div>
                         <p>
                           {new Date(item.tanggal).toLocaleDateString("id-ID")}
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-base-content/40">
                           {new Date(item.tanggal).toLocaleTimeString("id-ID")}
                         </p>
                       </div>
                     </td>
-
-                    <td className="p-4 text-gray-600">{item.jumlah}</td>
-
-                    <td className="p-4 font-semibold text-gray-800">
+                    <td>{item.jumlah}</td>
+                    <td className="font-semibold">
                       Rp{(item.total_harga || 0).toLocaleString("id-ID")}
                     </td>
-
-                    <td className="p-4">
-                      <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs font-semibold">
-                        Terjual
-                      </span>
+                    <td>
+                      <span className="badge badge-success">Terjual</span>
                     </td>
                   </tr>
                 ))

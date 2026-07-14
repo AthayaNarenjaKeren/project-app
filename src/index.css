@@ -18,47 +18,125 @@
   animation: slideIn 0.5s ease-out;
 }
 
-/* CSS Manual */
-.card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+/* ===== PERBAIKAN DARK MODE ===== */
+[data-theme="dark"] {
+  --bg-body: #0d1117;
+  --bg-card: #161b22;
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --border-color: #30363d;
 }
 
-.card:hover {
-  transform: translateY(-4px);
+body {
+  background-color: var(--bg-body);
+  color: var(--text-primary);
 }
 
-/* Table */
-.table-modern {
-  width: 100%;
-  border-collapse: collapse;
+/* Biar semua background ikut gelap */
+.dark .bg-white {
+  background-color: #161b22 !important;
 }
 
-.table-modern th {
-  text-align: left;
-  padding: 14px;
-  font-size: 13px;
-  color: #6b7280;
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: #0d1117 !important;
 }
 
-.table-modern td {
-  padding: 16px 14px;
-  border-top: 1px solid #eee;
+.dark .text-gray-800,
+.dark .text-gray-700,
+.dark .text-gray-900 {
+  color: #f0f6fc !important;
 }
 
-.table-modern tr:hover {
-  background: #f9fafb;
+.dark .text-gray-500,
+.dark .text-gray-400,
+.dark .text-gray-600 {
+  color: #8b949e !important;
 }
 
-/* Badge */
-.badge-success {
-  background: #dcfce7;
-  color: #16a34a;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
+.dark .border-gray-200,
+.dark .border-gray-100 {
+  border-color: #30363d !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #161b22 !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #21262d !important;
+}
+
+.dark .bg-slate-100 {
+  background-color: #21262d !important;
+}
+
+/* Card di dark mode */
+.dark .card {
+  background-color: #161b22 !important;
+  border: 1px solid #30363d;
+}
+
+/* Input di dark mode */
+.dark input,
+.dark select {
+  background-color: #0d1117 !important;
+  color: #f0f6fc !important;
+  border-color: #30363d !important;
+}
+
+.dark input::placeholder {
+  color: #8b949e !important;
+}
+
+/* Table di dark mode */
+.dark .table {
+  color: #f0f6fc !important;
+}
+
+.dark .table th {
+  background-color: #21262d !important;
+  color: #8b949e !important;
+}
+
+.dark .table td {
+  border-bottom-color: #30363d !important;
+}
+
+.dark .table tr:hover {
+  background-color: #21262d !important;
+}
+
+/* Badge di dark mode */
+.dark .badge-success {
+  background-color: #2ea043 !important;
+  color: #fff !important;
+}
+
+.dark .badge {
+  color: #fff !important;
+}
+
+/* Gradient di dark mode */
+.dark .bg-gradient-to-br {
+  background: #0d1117 !important;
+}
+
+.dark .bg-gradient-to-r {
+  background: #1f2937 !important;
+}
+
+/* Scrollbar di dark mode */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
 }

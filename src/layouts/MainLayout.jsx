@@ -4,13 +4,13 @@ import Header from "./Header";
 
 function MainLayout() {
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex bg-base-200 min-h-screen">
       <Sidebar />
 
       <div className="flex-1">
         <Header />
 
-        <main className="p-8">
+        <main className="p-8 bg-base-200 min-h-screen">
           <Outlet />
         </main>
       </div>
