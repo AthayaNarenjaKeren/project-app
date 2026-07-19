@@ -131,7 +131,9 @@ function DataBarang() {
         kategori: stokItem.kategori,
       })
       .then((res) => {
-        setMessage(`✅ Stok ${stokItem.nama_barang} berhasil ditambah ${tambahan} (total: ${stokBaru})`);
+        setMessage(
+          `✅ Stok ${stokItem.nama_barang} berhasil ditambah ${tambahan} (total: ${stokBaru})`
+        );
         getBarang();
         setShowStokModal(false);
         setStokItem(null);
@@ -244,39 +246,39 @@ function DataBarang() {
 
   const kategoriList = Object.keys(kategoriCount);
 
-  // 🔥 WARNA UNTUK CARD KATEGORI
+  // 🔥 WARNA UNTUK CARD KATEGORI (tetap dipakai buat card filter)
   const warnaKategori = {
     "Cat Avian": "bg-purple-100 border-purple-400 hover:bg-purple-200",
-    "Semen": "bg-blue-100 border-blue-400 hover:bg-blue-200",
+    Semen: "bg-blue-100 border-blue-400 hover:bg-blue-200",
     "Bahan Bangunan": "bg-green-100 border-green-400 hover:bg-green-200",
-    "Kayu": "bg-amber-100 border-amber-400 hover:bg-amber-200",
-    "Keramik": "bg-pink-100 border-pink-400 hover:bg-pink-200",
-    "Cat": "bg-red-100 border-red-400 hover:bg-red-200",
+    Kayu: "bg-amber-100 border-amber-400 hover:bg-amber-200",
+    Keramik: "bg-pink-100 border-pink-400 hover:bg-pink-200",
+    Cat: "bg-red-100 border-red-400 hover:bg-red-200",
     "Pipa PVC": "bg-cyan-100 border-cyan-400 hover:bg-cyan-200",
     "Pipa Besi": "bg-slate-100 border-slate-400 hover:bg-slate-200",
-    "Paku": "bg-gray-100 border-gray-400 hover:bg-gray-200",
-    "Peralatan": "bg-orange-100 border-orange-400 hover:bg-orange-200",
-    "Listrik": "bg-yellow-100 border-yellow-400 hover:bg-yellow-200",
-    "Mortar": "bg-teal-100 border-teal-400 hover:bg-teal-200",
-    "Atap": "bg-indigo-100 border-indigo-400 hover:bg-indigo-200",
-    "Lainnya": "bg-gray-100 border-gray-400 hover:bg-gray-200",
+    Paku: "bg-gray-100 border-gray-400 hover:bg-gray-200",
+    Peralatan: "bg-orange-100 border-orange-400 hover:bg-orange-200",
+    Listrik: "bg-yellow-100 border-yellow-400 hover:bg-yellow-200",
+    Mortar: "bg-teal-100 border-teal-400 hover:bg-teal-200",
+    Atap: "bg-indigo-100 border-indigo-400 hover:bg-indigo-200",
+    Lainnya: "bg-gray-100 border-gray-400 hover:bg-gray-200",
   };
 
   const iconKategori = {
     "Cat Avian": "🎨",
-    "Semen": "🧱",
+    Semen: "🧱",
     "Bahan Bangunan": "🏗️",
-    "Kayu": "🪵",
-    "Keramik": "🪞",
-    "Cat": "🎨",
+    Kayu: "🪵",
+    Keramik: "🪞",
+    Cat: "🎨",
     "Pipa PVC": "🔧",
     "Pipa Besi": "🔩",
-    "Paku": "📌",
-    "Peralatan": "🔨",
-    "Listrik": "💡",
-    "Mortar": "🧱",
-    "Atap": "🏠",
-    "Lainnya": "📦",
+    Paku: "📌",
+    Peralatan: "🔨",
+    Listrik: "💡",
+    Mortar: "🧱",
+    Atap: "🏠",
+    Lainnya: "📦",
   };
 
   const daftarKategori = [
@@ -297,89 +299,139 @@ function DataBarang() {
   ];
 
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold text-gray-800 mb-8">Data Barang</h1>
+    <div className="p-6 bg-base-200 min-h-screen">
+      <h1 className="text-4xl font-bold text-base-content mb-8">Data Barang</h1>
 
-      {/* FORM */}
-      <div className="card bg-base-100 shadow-xl">
-    <div className="card-body">
-        <h2 className="text-lg font-semibold mb-4 text-gray-800">
-          {editId ? "Edit Barang" : "Tambah Barang"}
-        </h2>
-        </div>
-        
-
-        <form onSubmit={handleSubmit} className="grid grid-cols-4 gap-4">
-          <input
-            type="text"
-            name="nama_barang"
-            placeholder="Nama Barang"
-            value={form.nama_barang}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-            required
-          />
-
-          <input
-            type="number"
-            name="harga"
-            placeholder="Harga"
-            value={form.harga}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-            required
-          />
-
-          <input
-            type="number"
-            name="stok"
-            placeholder="Stok"
-            value={form.stok}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-            required
-          />
-
-          <select
-            name="kategori"
-            value={form.kategori}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-            required
-          >
-            <option value="">Pilih Kategori</option>
-            {daftarKategori.map((kat) => (
-              <option key={kat} value={kat}>
-                {kat}
-              </option>
-            ))}
-          </select>
-
-          <button className="bg-gradient-to-r from-blue-600 to-blue-400 text-white rounded-xl font-medium shadow-md hover:opacity-90 transition col-span-4 py-3">
-            {editId ? "Update" : "Tambah"}
-          </button>
-        </form>
-
-        {editId && (
-          <button
-            onClick={resetForm}
-            className="mt-4 text-sm text-gray-500 hover:text-gray-800"
-          >
-            Batal Edit
-          </button>
-        )}
-
-        {message && (
-          <div className="mt-4 p-3 bg-green-100 text-green-600 rounded-xl">
-            {message}
+      {/* ============================================================
+          🔥 FORM - TAMBAH BARANG VERSION 2 (MODERN)
+          ============================================================ */}
+      <div className="card bg-base-100 shadow-xl border border-base-300 mb-8">
+        <div className="card-body p-8">
+          {/* HEADER */}
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <h2 className="text-2xl font-bold text-base-content">
+                {editId ? "Edit Barang" : "Tambah Barang"}
+              </h2>
+              <p className="text-base-content/60 text-sm mt-1">
+                {editId
+                  ? "Ubah data barang yang sudah ada."
+                  : "Tambahkan barang baru ke dalam inventaris."}
+              </p>
+            </div>
+            {editId && (
+              <button
+                onClick={resetForm}
+                className="btn btn-ghost btn-sm text-error"
+              >
+                ✕ Batal Edit
+              </button>
+            )}
           </div>
-        )}
+
+          {/* FORM */}
+          <form onSubmit={handleSubmit} className="mt-4">
+            <div className="grid md:grid-cols-2 gap-5">
+              {/* Nama Barang */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium text-base-content/80">
+                    Nama Barang
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  name="nama_barang"
+                  placeholder="Contoh: Semen Tiga Roda"
+                  value={form.nama_barang}
+                  onChange={handleChange}
+                  className="input input-bordered w-full focus:input-primary"
+                  required
+                />
+              </div>
+
+              {/* Harga */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium text-base-content/80">
+                    Harga
+                  </span>
+                </label>
+                <input
+                  type="number"
+                  name="harga"
+                  placeholder="Contoh: 65000"
+                  value={form.harga}
+                  onChange={handleChange}
+                  className="input input-bordered w-full focus:input-primary"
+                  required
+                />
+              </div>
+
+              {/* Stok */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium text-base-content/80">
+                    Stok
+                  </span>
+                </label>
+                <input
+                  type="number"
+                  name="stok"
+                  placeholder="Contoh: 50"
+                  value={form.stok}
+                  onChange={handleChange}
+                  className="input input-bordered w-full focus:input-primary"
+                  required
+                />
+              </div>
+
+              {/* Kategori */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium text-base-content/80">
+                    Kategori
+                  </span>
+                </label>
+                <select
+                  name="kategori"
+                  value={form.kategori}
+                  onChange={handleChange}
+                  className="select select-bordered w-full focus:select-primary"
+                  required
+                >
+                  <option disabled value="">
+                    Pilih kategori...
+                  </option>
+                  {daftarKategori.map((kat) => (
+                    <option key={kat} value={kat}>
+                      {kat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* TOMBOL */}
+            <div className="md:col-span-2 flex justify-end mt-6">
+              <button type="submit" className="btn btn-primary px-8">
+                {editId ? "✏️ Update Barang" : "➕ Tambah Barang"}
+              </button>
+            </div>
+          </form>
+
+          {/* PESAN SUKSES */}
+          {message && (
+            <div className="alert alert-success mt-4">
+              <span>{message}</span>
+            </div>
+          )}
+        </div>
       </div>
-      
 
       {/* 🔥 CARD KATEGORI - FILTER CEPAT */}
       <div className="mb-6">
-        <h3 className="text-sm font-semibold text-gray-500 mb-3">
+        <h3 className="text-sm font-semibold text-base-content/60 mb-3">
           📂 Filter Kategori
         </h3>
         <div className="flex flex-wrap gap-3">
@@ -391,8 +443,8 @@ function DataBarang() {
             }}
             className={`cursor-pointer px-5 py-3 rounded-xl border-2 transition-all duration-200 ${
               selectedKategori === ""
-                ? "bg-blue-500 text-white border-blue-600 shadow-md"
-                : "bg-white border-gray-300 hover:border-blue-400 hover:shadow-md text-gray-700"
+                ? "bg-primary text-primary-content border-primary shadow-md"
+                : "bg-base-100 border-base-300 hover:border-primary hover:shadow-md text-base-content"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -414,15 +466,22 @@ function DataBarang() {
               }}
               className={`cursor-pointer px-5 py-3 rounded-xl border-2 transition-all duration-200 ${
                 selectedKategori === kategori
-                  ? "bg-blue-500 text-white border-blue-600 shadow-md"
-                  : `${warnaKategori[kategori] || "bg-gray-100 border-gray-300 hover:border-blue-400 hover:shadow-md"} text-gray-700`
+                  ? "bg-primary text-primary-content border-primary shadow-md"
+                  : `${
+                      warnaKategori[kategori] ||
+                      "bg-base-100 border-base-300 hover:border-primary hover:shadow-md"
+                    } text-base-content`
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="text-2xl">{iconKategori[kategori] || "📦"}</span>
+                <span className="text-2xl">
+                  {iconKategori[kategori] || "📦"}
+                </span>
                 <div>
                   <p className="font-bold text-sm">{kategori}</p>
-                  <p className="text-xs opacity-75">{kategoriCount[kategori]} barang</p>
+                  <p className="text-xs opacity-75">
+                    {kategoriCount[kategori]} barang
+                  </p>
                 </div>
               </div>
             </div>
@@ -437,18 +496,18 @@ function DataBarang() {
           placeholder="Cari barang..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-white border border-gray-200 rounded-xl px-5 py-3 outline-none focus:ring-2 focus:ring-blue-400 flex-1 min-w-[200px]"
+          className="input input-bordered flex-1 min-w-[200px]"
         />
 
         <div className="flex items-center gap-2 ml-auto">
-          <label className="text-sm text-gray-500">Tampil:</label>
+          <label className="text-sm text-base-content/60">Tampil:</label>
           <select
             value={itemsPerPage}
             onChange={(e) => {
               setItemsPerPage(Number(e.target.value));
               setCurrentPage(1);
             }}
-            className="bg-white border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400"
+            className="select select-bordered"
           >
             <option value={5}>5</option>
             <option value={10}>10</option>
@@ -459,190 +518,195 @@ function DataBarang() {
         </div>
       </div>
 
-      {/* TABLE */}
-      <div id="table-section" className="bg-white rounded-2xl p-8 shadow-md">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Daftar Barang Toko Bangunan
-          </h2>
-          <span className="text-sm text-gray-400">
-            {selectedKategori ? `Kategori: ${selectedKategori}` : "Semua Kategori"} • Total: {filteredBarang.length} barang
-          </span>
-        </div>
+      {/* ============================================================
+          TABLE
+          ============================================================ */}
+      <div
+        id="table-section"
+        className="card bg-base-100 shadow-xl border border-base-300"
+      >
+        <div className="card-body p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-base-content">
+              Daftar Barang Toko Bangunan
+            </h2>
+            <span className="text-sm text-base-content/60">
+              {selectedKategori
+                ? `Kategori: ${selectedKategori}`
+                : "Semua Kategori"}{" "}
+              • Total: {filteredBarang.length} barang
+            </span>
+          </div>
 
-        {Object.keys(groupedCurrentItems).length === 0 ? (
-          <p className="text-center text-gray-400 py-8">
-            Tidak ada barang ditemukan
-          </p>
-        ) : (
-          Object.keys(groupedCurrentItems).map((kategori) => (
-            <div key={kategori} className="mb-8">
-              {/* HEADER KATEGORI */}
-              <div className="bg-gradient-to-r from-blue-500 to-blue-400 text-white px-6 py-3 rounded-xl mb-4 flex justify-between items-center">
-                <h3 className="text-lg font-bold flex items-center gap-2">
-                  <span className="text-2xl">{iconKategori[kategori] || "📂"}</span>
-                  {kategori}
-                  <span className="text-sm font-normal ml-2 opacity-80">
-                    ({groupedCurrentItems[kategori].length} barang)
-                  </span>
-                </h3>
+          {Object.keys(groupedCurrentItems).length === 0 ? (
+            <p className="text-center text-base-content/40 py-8">
+              Tidak ada barang ditemukan
+            </p>
+          ) : (
+            Object.keys(groupedCurrentItems).map((kategori) => (
+              <div key={kategori} className="mb-8">
+                {/* 🔥 HEADER KATEGORI - VERSI PREMIUM (INDIGO GRADASI) */}
+                {/* 🔥 HEADER KATEGORI - BG INDIGO-600, TULISAN PUTIH */}
+                <div className="bg-indigo-600 text-white px-6 py-3 rounded-xl mb-4 flex justify-between items-center shadow-sm">
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <span className="text-2xl">
+                      {iconKategori[kategori] || "📂"}
+                    </span>
+                    {kategori}
+                    <span className="text-sm font-normal ml-2 opacity-80">
+                      ({groupedCurrentItems[kategori].length} barang)
+                    </span>
+                  </h3>
 
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleTambahKeKategori(kategori)}
-                    className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm transition"
-                  >
-                    ➕ Tambah
-                  </button>
-                  <button
-                    onClick={() => handleLihatSemua(kategori)}
-                    className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm transition"
-                  >
-                    👁️ Lihat
-                  </button>
-                  <button
-                    onClick={() => handleExportKategori(kategori)}
-                    className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm transition"
-                  >
-                    📥 Export
-                  </button>
-                  <button
-                    onClick={() => handleDeleteKategori(kategori)}
-                    className="bg-red-500/50 hover:bg-red-500/70 text-white px-3 py-1.5 rounded-lg text-sm transition"
-                  >
-                    🗑️ Hapus
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleTambahKeKategori(kategori)}
+                      className="btn btn-sm bg-white/20 hover:bg-white/30 text-white border-none"
+                    >
+                      ➕ Tambah
+                    </button>
+                    <button
+                      onClick={() => handleLihatSemua(kategori)}
+                      className="btn btn-sm bg-white/20 hover:bg-white/30 text-white border-none"
+                    >
+                      👁️ Lihat
+                    </button>
+                    <button
+                      onClick={() => handleExportKategori(kategori)}
+                      className="btn btn-sm bg-white/20 hover:bg-white/30 text-white border-none"
+                    >
+                      📥 Export
+                    </button>
+                    <button
+                      onClick={() => handleDeleteKategori(kategori)}
+                      className="btn btn-sm bg-red-500/40 hover:bg-red-500/60 text-white border-none"
+                    >
+                      🗑️ Hapus
+                    </button>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Nama Barang</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {groupedCurrentItems[kategori].map((item) => (
+                        <tr key={item.id}>
+                          <td className="font-semibold">{item.nama_barang}</td>
+                          <td>
+                            Rp{Number(item.harga).toLocaleString("id-ID")}
+                          </td>
+                          <td>{item.stok}</td>
+                          <td className="flex gap-2 flex-wrap">
+                            <button
+                              onClick={() => handleEdit(item)}
+                              className="btn btn-warning btn-sm"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleBukaModalStok(item)}
+                              className="btn btn-success btn-sm"
+                            >
+                              + Stok
+                            </button>
+                            <button
+                              onClick={() => handleDelete(item.id)}
+                              className="btn btn-error btn-sm"
+                            >
+                              Hapus
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            ))
+          )}
 
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gray-100 text-gray-600">
-                      <th className="p-4 text-left rounded-l-xl">
-                        Nama Barang
-                      </th>
-                      <th className="p-4 text-left">Harga</th>
-                      <th className="p-4 text-left">Stok</th>
-                      <th className="p-4 text-left rounded-r-xl">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {groupedCurrentItems[kategori].map((item) => (
-                      <tr key={item.id} className="border-b border-gray-100">
-                        <td className="p-4 font-semibold text-gray-800">
-                          {item.nama_barang}
-                        </td>
-                        <td className="p-4 text-gray-600">
-                          Rp{Number(item.harga).toLocaleString("id-ID")}
-                        </td>
-                        <td className="p-4 text-gray-600">{item.stok}</td>
-                        <td className="p-4 flex gap-2 flex-wrap">
-                          <button
-                            onClick={() => handleEdit(item)}
-                            className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg transition"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleBukaModalStok(item)}
-                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition"
-                          >
-                            + Stok
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
-                          >
-                            Hapus
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+          {/* 🔥 PAGINATION */}
+          {filteredBarang.length > itemsPerPage && (
+            <div className="flex justify-between items-center mt-6 pt-4 border-t border-base-300">
+              <p className="text-sm text-base-content/60">
+                Menampilkan {indexOfFirstItem + 1} -{" "}
+                {Math.min(indexOfLastItem, filteredBarang.length)} dari{" "}
+                {filteredBarang.length} barang
+              </p>
+
+              <div className="flex gap-2 items-center">
+                <button
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`btn btn-sm ${
+                    currentPage === 1 ? "btn-disabled" : "btn-ghost"
+                  }`}
+                >
+                  ⬅️ Prev
+                </button>
+
+                <div className="flex gap-1">
+                  {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => goToPage(pageNum)}
+                        className={`btn btn-sm ${
+                          currentPage === pageNum ? "btn-primary" : "btn-ghost"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`btn btn-sm ${
+                    currentPage === totalPages ? "btn-disabled" : "btn-ghost"
+                  }`}
+                >
+                  Next ➡️
+                </button>
               </div>
             </div>
-          ))
-        )}
-
-        {/* 🔥 PAGINATION */}
-        {filteredBarang.length > itemsPerPage && (
-          <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
-            <p className="text-sm text-gray-500">
-              Menampilkan {indexOfFirstItem + 1} -{" "}
-              {Math.min(indexOfLastItem, filteredBarang.length)} dari{" "}
-              {filteredBarang.length} barang
-            </p>
-
-            <div className="flex gap-2 items-center">
-              <button
-                onClick={() => goToPage(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  currentPage === 1
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                }`}
-              >
-                ⬅️ Prev
-              </button>
-
-              <div className="flex gap-1">
-                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => goToPage(pageNum)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                        currentPage === pageNum
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                onClick={() => goToPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  currentPage === totalPages
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                }`}
-              >
-                Next ➡️
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* 🔥 MODAL / POPUP TAMBAH STOK */}
       {showStokModal && stokItem && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">
+          <div className="bg-base-100 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-base-300">
+            <h3 className="text-2xl font-bold text-base-content mb-2">
               Tambah Stok
             </h3>
-            <p className="text-gray-500 mb-4">
+            <p className="text-base-content/60 mb-4">
               Tambah stok untuk{" "}
-              <span className="font-bold">{stokItem.nama_barang}</span>
+              <span className="font-bold text-base-content">
+                {stokItem.nama_barang}
+              </span>
               <br />
               <span className="text-sm">
                 Stok saat ini: <strong>{stokItem.stok}</strong>
@@ -654,7 +718,7 @@ function DataBarang() {
               placeholder="Masukkan jumlah tambahan..."
               value={stokTambahan}
               onChange={(e) => setStokTambahan(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+              className="input input-bordered w-full mb-4"
               autoFocus
               min="1"
             />
@@ -662,7 +726,7 @@ function DataBarang() {
             <div className="flex gap-3">
               <button
                 onClick={handleTambahStok}
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition"
+                className="btn btn-success flex-1"
               >
                 ✅ Tambah
               </button>
@@ -672,7 +736,7 @@ function DataBarang() {
                   setStokItem(null);
                   setStokTambahan("");
                 }}
-                className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-3 rounded-xl font-semibold transition"
+                className="btn btn-ghost flex-1"
               >
                 Batal
               </button>
